@@ -4,6 +4,7 @@ window.onload = () => {
     configureStore,
     createAction,
     createReducer,
+    createSlice,
   } = require('@reduxjs/toolkit');
 
   const incrementButton = document.getElementById('increment');
@@ -11,25 +12,23 @@ window.onload = () => {
   const countElement = document.getElementById('count');
 
   /**
-   * Actions
-   */
-  const increment = createAction('INCREMENT');
-  const decrement = createAction('DECREMENT');
-
-  /**
-   * Reducer
+   * Slice
    */
   const initialState = 0;
-  const counterReducer = createReducer(initialState, {
-    [increment]: (state) => state + 1,
-    [decrement]: (state) => state - 1,
+  const counterSlice = createSlice({
+    initialState,
+    name: 'counter',
+    reducers: {
+      increment: (state) => state + 1,
+      decrement: (state) => state - 1,
+    },
   });
 
   /**
    * Store
    */
   const store = configureStore({
-    reducer: counterReducer,
+    reducer: counterSlice.reducer,
   });
   store.subscribe(render);
 
@@ -39,10 +38,12 @@ window.onload = () => {
   render();
 
   incrementButton.addEventListener('click', () => {
+    const { increment } = counterSlice.actions;
     store.dispatch(increment());
   });
 
   decrementButton.addEventListener('click', () => {
+    const { decrement } = counterSlice.actions;
     store.dispatch(decrement());
   });
 
