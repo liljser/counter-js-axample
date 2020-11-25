@@ -1,24 +1,40 @@
 window.onload = () => {
-  const incrementButton = document.getElementById('increment');
-  const decrementButton = document.getElementById('decrement');
+  const React = require('react');
+  const ReactDOM = require('react-dom');
+  const { useState } = React;
 
-  incrementButton.addEventListener('click', () => {
-    incrementCount();
-  });
-
-  decrementButton.addEventListener('click', () => {
-    decrementCount();
-  });
-
-  function incrementCount() {
-    const countElement = document.getElementById('count');
-    const count = Number(countElement.innerText);
-    countElement.innerText = count + 1;
+  function App() {
+    return (
+      <React.Fragment>
+        <Counter />
+      </React.Fragment>
+    );
   }
 
-  function decrementCount() {
-    const countElement = document.getElementById('count');
-    const count = Number(countElement.innerText);
-    countElement.innerText = count - 1;
+  function Counter() {
+    const [count, setCount] = useState(0);
+
+    return (
+      <section className='counter'>
+        <h2>Counter</h2>
+        <button id='decrement' onClick={decrement}>
+          Decrement
+        </button>
+        <span id='count'>{count}</span>
+        <button id='increment' onClick={increment}>
+          Increment
+        </button>
+      </section>
+    );
+
+    function increment() {
+      setCount((prevCount) => prevCount + 1);
+    }
+    function decrement() {
+      setCount((prevCount) => prevCount - 1);
+    }
   }
+
+  const container = document.getElementById('app');
+  ReactDOM.render(<App />, container);
 };
