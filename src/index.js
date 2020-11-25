@@ -1,5 +1,6 @@
 window.onload = () => {
   const Redux = require('redux');
+  const { configureStore } = require('@reduxjs/toolkit');
 
   const incrementButton = document.getElementById('increment');
   const decrementButton = document.getElementById('decrement');
@@ -47,7 +48,9 @@ window.onload = () => {
    * Store
    */
 
-  const store = Redux.createStore(counterReducer);
+  const store = configureStore({
+    reducer: counterReducer,
+  });
   store.subscribe(render);
 
   /**
