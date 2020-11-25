@@ -1,6 +1,10 @@
 window.onload = () => {
   const Redux = require('redux');
-  const { configureStore, createAction } = require('@reduxjs/toolkit');
+  const {
+    configureStore,
+    createAction,
+    createReducer,
+  } = require('@reduxjs/toolkit');
 
   const incrementButton = document.getElementById('increment');
   const decrementButton = document.getElementById('decrement');
@@ -16,17 +20,10 @@ window.onload = () => {
    * Reducer
    */
   const initialState = 0;
-  function counterReducer(state = 0, action) {
-    const { type, payload } = action;
-    switch (type) {
-      case increment.type:
-        return state + 1;
-      case decrement.type:
-        return state - 1;
-      default:
-        return state;
-    }
-  }
+  const counterReducer = createReducer(initialState, {
+    [increment]: (state) => state + 1,
+    [decrement]: (state) => state - 1,
+  });
 
   /**
    * Store
