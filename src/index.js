@@ -1,16 +1,16 @@
 window.onload = () => {
   const Redux = require('redux');
-  const { configureStore } = require('@reduxjs/toolkit');
+  const { configureStore, createAction } = require('@reduxjs/toolkit');
 
   const incrementButton = document.getElementById('increment');
   const decrementButton = document.getElementById('decrement');
   const countElement = document.getElementById('count');
 
   /**
-   * Constants
+   * Actions
    */
-  const INCREMENT = 'INCREMENT';
-  const DECREMENT = 'DECREMENT';
+  const increment = createAction('INCREMENT');
+  const decrement = createAction('DECREMENT');
 
   /**
    * Reducer
@@ -19,9 +19,9 @@ window.onload = () => {
   function counterReducer(state = 0, action) {
     const { type, payload } = action;
     switch (type) {
-      case INCREMENT:
+      case increment.type:
         return state + 1;
-      case DECREMENT:
+      case decrement.type:
         return state - 1;
       default:
         return state;
@@ -29,25 +29,8 @@ window.onload = () => {
   }
 
   /**
-   * Action Creators
-   */
-
-  function increment() {
-    return {
-      type: INCREMENT,
-    };
-  }
-
-  function decrement() {
-    return {
-      type: DECREMENT,
-    };
-  }
-
-  /**
    * Store
    */
-
   const store = configureStore({
     reducer: counterReducer,
   });
