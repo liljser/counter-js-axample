@@ -3,48 +3,27 @@ window.onload = () => {
   const ReactDOM = require('react-dom');
   const Redux = require('redux');
   const { Provider, useDispatch, useSelector } = require('react-redux');
+  const { configureStore, createSlice } = require('@reduxjs/toolkit');
 
   /**
-   * Constants
-   */
-  const INCREMENT = 'INCREMENT';
-  const DECREMENT = 'DECREMENT';
-
-  /**
-   * Reducer
+   * Slice
    */
   const initialState = 0;
-  function counterReducer(state = 0, action) {
-    const { type, payload } = action;
-    switch (type) {
-      case INCREMENT:
-        return state + 1;
-      case DECREMENT:
-        return state - 1;
-      default:
-        return state;
-    }
-  }
-
-  /**
-   * Action Creators
-   */
-  function increment() {
-    return {
-      type: INCREMENT,
-    };
-  }
-
-  function decrement() {
-    return {
-      type: DECREMENT,
-    };
-  }
+  const counterSlice = createSlice({
+    initialState,
+    name: 'counter',
+    reducers: {
+      increment: (state) => state + 1,
+      decrement: (state) => state - 1,
+    },
+  });
 
   /**
    * Store
    */
-  const store = Redux.createStore(counterReducer);
+  const store = configureStore({
+    reducer: counterSlice.reducer,
+  });
 
   /**
    * React
@@ -60,6 +39,7 @@ window.onload = () => {
   function Counter() {
     const dispatch = useDispatch();
     const count = useSelector((state) => state);
+    const { increment, decrement } = counterSlice.actions;
 
     return (
       <section className='counter'>
