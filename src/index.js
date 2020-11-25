@@ -1,15 +1,9 @@
 window.onload = () => {
+  const React = require('react');
+  const ReactDOM = require('react-dom');
   const Redux = require('redux');
-  const {
-    configureStore,
-    createAction,
-    createReducer,
-    createSlice,
-  } = require('@reduxjs/toolkit');
-
-  const incrementButton = document.getElementById('increment');
-  const decrementButton = document.getElementById('decrement');
-  const countElement = document.getElementById('count');
+  const { Provider, useDispatch, useSelector } = require('react-redux');
+  const { configureStore, createSlice } = require('@reduxjs/toolkit');
 
   /**
    * Slice
@@ -30,24 +24,42 @@ window.onload = () => {
   const store = configureStore({
     reducer: counterSlice.reducer,
   });
-  store.subscribe(render);
 
   /**
-   * Main
+   * React
    */
-  render();
-
-  incrementButton.addEventListener('click', () => {
-    const { increment } = counterSlice.actions;
-    store.dispatch(increment());
-  });
-
-  decrementButton.addEventListener('click', () => {
-    const { decrement } = counterSlice.actions;
-    store.dispatch(decrement());
-  });
-
-  function render() {
-    countElement.innerText = store.getState().toString();
+  function App() {
+    return (
+      <React.Fragment>
+        <Counter />
+      </React.Fragment>
+    );
   }
+
+  function Counter() {
+    const dispatch = useDispatch();
+    const count = useSelector((state) => state);
+    const { increment, decrement } = counterSlice.actions;
+
+    return (
+      <section className='counter'>
+        <h2>Counter</h2>
+        <button id='decrement' onClick={() => dispatch(decrement())}>
+          Decrement
+        </button>
+        <span id='count'>{count}</span>
+        <button id='increment' onClick={() => dispatch(increment())}>
+          Increment
+        </button>
+      </section>
+    );
+  }
+
+  const container = document.getElementById('app');
+  ReactDOM.render(
+    <Provider store={store}>
+      <App />
+    </Provider>,
+    container
+  );
 };
